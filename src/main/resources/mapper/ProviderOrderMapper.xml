@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anur.pagehelper.dao.ProviderOrderMapper">
+    <resultMap id="BaseResultMap" type="com.anur.pagehelper.model.ProviderOrder">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="po_id" jdbcType="VARCHAR" property="poId"/>
+    </resultMap>
+
+    <resultMap id="ResultMapWithOrderInfo" type="com.anur.pagehelper.model.ProviderOrder">
+        <id column="po_id" jdbcType="VARCHAR" property="poId"/>
+        <collection property="orderInfoList" ofType="com.anur.pagehelper.model.OrderInfo">
+            <id column="oi_id" jdbcType="INTEGER" property="oiId"/>
+            <result column="text" jdbcType="VARCHAR" property="text"/>
+            <result column="provider_order_id" jdbcType="VARCHAR" property="providerOrderId"/>
+        </collection>
+    </resultMap>
+
+    <select id="getProviderOrderWithOrderInfoTest" resultMap="ResultMapWithOrderInfo" parameterType="java.lang.String">
+        SELECT *
+        FROM (SELECT * FROM provider_order WHERE po_id LIKE #{po_id}) AS limitable
+            LEFT JOIN order_info ON limitable.po_id = order_info.provider_order_id
+    </select>
+
+</mapper>
